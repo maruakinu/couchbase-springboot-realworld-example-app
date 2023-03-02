@@ -2,11 +2,14 @@ package com.springboot.couchbase.springbootrealworld.domain.article.service;
 
 import com.springboot.couchbase.springbootrealworld.configuration.DBProperties;
 import com.springboot.couchbase.springbootrealworld.domain.article.dto.ArticleDto;
+import com.springboot.couchbase.springbootrealworld.domain.article.dto.CommentDto;
 import com.springboot.couchbase.springbootrealworld.domain.article.dto.FavoriteDto;
 import com.springboot.couchbase.springbootrealworld.domain.article.entity.ArticleDocument;
+import com.springboot.couchbase.springbootrealworld.domain.article.entity.CommentDocument;
 import com.springboot.couchbase.springbootrealworld.domain.article.entity.FavoriteDocument;
 import com.springboot.couchbase.springbootrealworld.domain.article.model.FeedParams;
 import com.springboot.couchbase.springbootrealworld.domain.article.repository.ArticleRepository;
+import com.springboot.couchbase.springbootrealworld.domain.article.repository.CommentRepository;
 import com.springboot.couchbase.springbootrealworld.domain.article.repository.FavoriteRepository;
 import com.springboot.couchbase.springbootrealworld.domain.profile.dto.ProfileDto;
 import com.springboot.couchbase.springbootrealworld.domain.profile.entity.FollowDocument;
@@ -41,6 +44,9 @@ public class ArticleServiceImpl implements ArticleService {
     private FollowRepository followRepository;
 
     @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
     private DBProperties dbProperties;
     @Autowired
     private TagRepository tagRepository;
@@ -54,7 +60,6 @@ public class ArticleServiceImpl implements ArticleService {
                 .build();
 
         ArticleDocument articleDocument = ArticleDocument.builder()
-                .id(article.getId())
                 .slug(slug)
                 .title(article.getTitle())
                 .description(article.getDescription())
@@ -65,7 +70,7 @@ public class ArticleServiceImpl implements ArticleService {
 
                         for (String tag: article.getTagList()) {
                             tagRepository.save(ArticleTagRelationDocument.builder()
-                                        .id(article.getId())
+           //                             .id(article.getId())
                                         .article(articleDocument)
                                         .tag(tag)
                                         .build());
@@ -108,7 +113,7 @@ public class ArticleServiceImpl implements ArticleService {
      //   int favoriteCount = (int) favoriteEntities.stream().count();
 
     //    ArticleDocument result  = articleRepository.findBySlug(slug);
-        Boolean favorited  = favoriteRepository.findByArticleIdAndAuthorId(result.getId(), authUserDetails.getId()).isPresent();
+        Boolean favorited  = favoriteRepository.findByArticleIdAndAuthorEmail(result.getId(), authUserDetails.getEmail()).isPresent();
         int favoriteCount = (int) favoriteEntities.stream().count();
 
   //      return favoriteEntities.stream().map(favoriteEntity -> convertToDTO(authUserDetails, favoriteEntity)).collect(Collectors.toList());
@@ -117,7 +122,7 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     private ArticleDto convertEntityToDto(ArticleDocument entity, Boolean favorited, Long favoritesCount, AuthUserDetails authUserDetails) {
-        ProfileDto author = profileService.getProfileByUserId(entity.getAuthor().getId(), authUserDetails);
+        ProfileDto author = profileService.getProfileByUserIds(entity.getAuthor().getId());
         return ArticleDto.builder()
                 .id(entity.getId())
                 .slug(entity.getSlug())
@@ -129,9 +134,9 @@ public class ArticleServiceImpl implements ArticleService {
                 .updatedAt(entity.getUpdatedAt())
                 .favorited(favorited)
                 .favoritesCount(favoritesCount)
-                .tagList(entity.getTagList())
+                .tagList(entity.getTagList().stream().collect(Collectors.toList()))
+                //.tagList(entity.getTagList())
                 .build();
-
     }
 
     @Transactional
@@ -163,7 +168,7 @@ public class ArticleServiceImpl implements ArticleService {
     public void deleteArticle(String slug, AuthUserDetails authUserDetails) {
         ArticleDocument found = articleRepository.findBySlug(slug);
         System.out.println("This is Slug" + found.getId());
-        articleRepository.deleteById(found.getId());
+        articleRepository.delete(found);
     }
 
     @Transactional
@@ -171,13 +176,13 @@ public class ArticleServiceImpl implements ArticleService {
     public ArticleDto favoriteArticle(String slug, AuthUserDetails authUserDetails) {
         ArticleDocument found = articleRepository.findBySlug(slug);
 
-        favoriteRepository.findByArticleIdAndAuthorId(found.getId(), authUserDetails.getId())
+        favoriteRepository.findByArticleIdAndAuthorEmail(found.getId(), authUserDetails.getEmail())
                 .ifPresent(favoriteEntity -> { throw new AppException(Error.ALREADY_FAVORITED_ARTICLE);});
 
         FavoriteDocument favorite = FavoriteDocument.builder()
                 .article(found)
                 .author(UserDocument.builder()
-                        .id(authUserDetails.getId())
+                        .id(String.valueOf(authUserDetails.getId()))
                         .bio(authUserDetails.getBio())
                         .email(authUserDetails.getEmail())
                         .build())
@@ -188,113 +193,23 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
 
-//    private ArticleDto convertEntityToDtos(ArticleDocument entity, Boolean favorited, Long favoritesCount, AuthUserDetails authUserDetails) {
-//        ProfileDto author = profileService.getProfileByUserId(entity.getAuthor().getId(), authUserDetails);
-//        FavoriteDto favoritedBy = favoriteService.getFavoriteByUserId(entity.getAuthor().getId(), authUserDetails);
-//        return ArticleDto.builder()
-//                .id(entity.getId())
-//                .slug(entity.getSlug())
-//                .title(entity.getTitle())
-//                .description(entity.getDescription())
-//                .body(entity.getBody())
-//                .author(author)
-//                .createdAt(entity.getCreatedAt())
-//                .updatedAt(entity.getUpdatedAt())
-//                .favoritedBy(favoritedBy.getAuthor())
-//                .favorited(favorited)
-//                .favoritesCount(favoritesCount)
-//                .tagList(entity.getTagList())
-//                .build();
-//
-//    }
-
-    @Transactional
-    @Override
-    public ArticleDto unfavoriteArticle(String slug, AuthUserDetails authUserDetails) {
-        ArticleDocument found = articleRepository.findBySlug(slug);
-        FavoriteDocument favorite = found.getFavoriteList().stream()
-                .filter(favoriteEntity -> favoriteEntity.getArticle().getId().equals(found.getId())
-                        && favoriteEntity.getAuthor().getId().equals(authUserDetails.getId())).findAny()
-                .orElseThrow(() -> new AppException(Error.FAVORITE_NOT_FOUND));
-        found.getFavoriteList().remove(favorite); // cascade REMOVE
-        return getArticle(slug, authUserDetails);
-
-    }
-
-//    @Override
-//    public String unfavoriteArticle(String slug ) {
-//        ArticleDocument found = articleRepository.findBySlug(slug);
-//        Cluster realworldCluster = Cluster.connect("couchbase://127.0.0.1", "Administrator", "Maru@Akinu11");
-//        Bucket bucket = realworldCluster.bucket("sample");
-//        N1QLQuery result = bucket.viewQuery(N1QLQuery.query("SELECT * FROM article"));
-////        Collection favoriteCol = bucket.collection("article");
-////        GetResult result = favoriteCol.get("1");
-//        System.out.println(result);
-//        return result.toString();
-//    }
-
-
 
 //    @Transactional
 //    @Override
-//    public void unfavoriteArticle(String slug) {
+//    public ArticleDto unfavoriteArticle(String slug, AuthUserDetails authUserDetails) {
 //        ArticleDocument found = articleRepository.findBySlug(slug);
-//        Cluster realworldCluster = Cluster.connect("couchbase://127.0.0.1", "Administrator", "Maru@Akinu11");
-//        Bucket bucket = realworldCluster.bucket("sample");;
-//        Collection favoriteCol = bucket.collection("favorite");
-//        GetResult result = favoriteCol.get("1");
-//        System.out.println(result);
-//        System.out.println(result);
-//        String slug = result.contentAsObject().getString("slug");
-//        String title = result.contentAsObject().getString("title");
-//        String description = result.contentAsObject().getString("description");
-//        String body = result.contentAsObject().getString("body");
-//        System.out.println(title);
-//        HashMap<String, String> map = new HashMap<>();
-//        map.put("title", title);
-//        map.put("description", description);
-//        map.put("body", body);
-
 //        FavoriteDocument favorite = found.getFavoriteList().stream()
-//                .filter(favoriteDocument -> favoriteDocument.getArticle().getId().equals(found.getId())
-//                        && favoriteDocument.getUser().getId().equals(authUserDetails.getId())).findAny()
+//                .filter(favoriteEntity -> favoriteEntity.getArticle().getId().equals(found.getId())
+//                        && favoriteEntity.getAuthor().getId().equals(authUserDetails.getId())).findAny()
 //                .orElseThrow(() -> new AppException(Error.FAVORITE_NOT_FOUND));
 //        found.getFavoriteList().remove(favorite); // cascade REMOVE
 //        return getArticle(slug, authUserDetails);
- //   }
-
-//    @Transactional
-//    @Override
-//    public void deleteFavorite(String commentId, AuthUserDetails authUserDetails) {
 //
-//        FavoriteDocument favoriteEntity = favoriteRepository.findById(commentId);
-//
-//        favoriteRepository.delete(favoriteEntity);
 //    }
 
 
 
-//    @Transactional(readOnly = true)
-//    @Override
-//    public List<ArticleDto> listArticle(ArticleQueryParam articleQueryParam, AuthUserDetails authUserDetails) {
-//        Pageable pageable = null;
-//        if (articleQueryParam.getOffset() != null) {
-//            pageable = PageRequest.of(articleQueryParam.getOffset(), articleQueryParam.getLimit());
-//        }
-//
-//        List<ArticleDocument> articleEntities;
-//        if (articleQueryParam.getTag() != null) {
-//            articleEntities = articleRepository.findByTag(articleQueryParam.getTag(), pageable);
-//        } else if  (articleQueryParam.getAuthor() != null) {
-//            articleEntities = articleRepository.findByAuthorName(articleQueryParam.getAuthor(), pageable);
-//        } else if (articleQueryParam.getFavorited() != null) {
-//            articleEntities = articleRepository.findByFavoritedUsername(articleQueryParam.getFavorited(), pageable);
-//        } else {
-//            articleEntities = articleRepository.findListByPaging(pageable);
-//        }
-//
-//        return convertToArticleList(articleEntities, authUserDetails);
-//    }
+
 
     private List<ArticleDto> convertToArticleList(List<ArticleDocument> articleEntities, AuthUserDetails authUserDetails) {
         return articleEntities.stream().map(entity -> {
@@ -306,45 +221,9 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
 
-//    @Transactional(readOnly = true)
-//    @Override
-//    public List<ArticleDto> listArticle(ArticleQueryParam articleQueryParam) {
-//        Pageable pageable = null;
-//        if (articleQueryParam.getOffset() != null) {
-//            pageable = PageRequest.of(articleQueryParam.getOffset(), articleQueryParam.getLimit());
-//        }
-//
-//        List<ArticleDocument> articleEntities;
-//        if (articleQueryParam.getTag() != null) {
-//            articleEntities = articleRepository.findByTag(articleQueryParam.getTag(), pageable);
-//        }
-//        else if  (articleQueryParam.getAuthor() != null) {
-//            articleEntities = articleRepository.findByAuthorName(articleQueryParam.getAuthor(), pageable);
-//        }
-//        else if (articleQueryParam.getFavorited() != null) {
-//            articleEntities = articleRepository.findByFavoritedUsername(articleQueryParam.getFavorited(), pageable);
-//        }
-//        else {
-//            articleEntities = articleRepository.findListByPaging(pageable);
-//        }
-//        articleEntities = articleRepository.findListByPaging(pageable);
-//
-//        return convertToArticleList(articleEntities);
-//    }
-
-//    private List<ArticleDto> convertToArticleList(List<ArticleDocument> articleEntities) {
-//        return articleEntities.stream().map(entity -> {
-//            List<FavoriteDocument> favorites = entity.getFavoriteList();
-// //           Boolean favorited = favorites.stream().anyMatch(favoriteEntity -> favoriteEntity.getUser().getId().equals(authUserDetails.getId()));
-//            int favoriteCount = favorites.size();
-//            return convertEntityToDto(entity, false, (long) favoriteCount, false);
-//        }).collect(Collectors.toList());
-//    }
-
-
     @Override
     public List<ArticleDto> feedArticles(AuthUserDetails authUserDetails, FeedParams feedParams) {
-        List<Long> feedAuthorIds = followRepository.findByFollowerId(authUserDetails.getId()).stream().map(FollowDocument::getFollowee).map(UserDocument::getId).collect(Collectors.toList());
+        List<String> feedAuthorIds = followRepository.findByFollowerId(authUserDetails.getId().toString()).stream().map(FollowDocument::getFollowee).map(UserDocument::getId).collect(Collectors.toList());
         return articleRepository.findByAuthorId(feedAuthorIds, PageRequest.of(feedParams.getOffset(), feedParams.getLimit())).stream().map(entity -> {
 
 //            List<FavoriteDocument> favorites = entity.getFavoriteList();
@@ -354,33 +233,62 @@ public class ArticleServiceImpl implements ArticleService {
 //            Boolean favorited = true;
 
             List<FavoriteDocument> favoriteEntities = favoriteRepository.findAllFavorites();
-            Boolean favoriteds  = favoriteRepository.findByAuthorId(authUserDetails.getId()).isPresent();
+            Boolean favoriteds  = favoriteRepository.findByAuthorEmail(authUserDetails.getEmail()).isPresent();
             int favoriteCounts = (int) favoriteEntities.stream().count();
 
-            return convertEntityToDto(entity, favoriteds, (long) favoriteCounts, authUserDetails);
+            return convertEntityToDto(entity, true, (long) favoriteCounts, authUserDetails);
         }).collect(Collectors.toList());
     }
 
     @Override
     public List<ArticleDto> getAllArticles(AuthUserDetails authUserDetails) {
+
+        List<ArticleDocument> result = articleRepository.findByAuthorId(authUserDetails.getId());
+
         List<ArticleDocument> articleEntities = articleRepository.findAllArticles();
         List<FavoriteDocument> favoriteEntities = favoriteRepository.findAllFavorites();
-        Boolean favoriteds  = favoriteRepository.findByAuthorId(authUserDetails.getId()).isPresent();
-        int favoriteCounts = (int) favoriteEntities.stream().count();
+        Boolean favorited  = favoriteRepository.findByAuthorEmail(authUserDetails.getEmail()).isPresent();
+        int favoriteCount = (int) favoriteEntities.stream().count();
 
 //        int favoriteCounts = 1;
 //        Boolean favoriteds = true;
 
-        return articleEntities.stream().map(articleEntity -> convertEntityToDto(articleEntity, favoriteds, (long) favoriteCounts, authUserDetails)).collect(Collectors.toList());
+        return result.stream().map(articleEntity -> convertEntityToDto(articleEntity, favorited, (long) favoriteCount, authUserDetails)).collect(Collectors.toList());
     }
 
     @Override
-    public List<ArticleDto> getAllArticlesYouFollow(AuthUserDetails authUserDetails) {
+    public List<ArticleDto> getAllArticlesYouFollow() {
+
+   //     ArticleDocument  result = articleRepository.findAllArticlesYouFollows();
         List<ArticleDocument> articleEntities = articleRepository.findAllArticlesYouFollow();
-        int favoriteCount = 1;
-        Boolean favorited = true;
-        return articleEntities.stream().map(articleEntity -> convertEntityToDto(articleEntity, favorited, (long) favoriteCount, authUserDetails)).collect(Collectors.toList());
+//        int favoriteCount = 1;
+//        Boolean favorited = true;
+        List<FavoriteDocument> favoriteEntities = favoriteRepository.findAllFavorites();
+//        Boolean favorited  = true;
+//        int favoriteCount = (int) favoriteEntities.stream().count();
+ //       Boolean favorited  = favoriteRepository.findByAuthorId(result.getId()).isPresent();
+        int favoriteCount = (int) favoriteEntities.stream().count();
+        return articleEntities.stream().map(articleEntity -> convertEntityToDtos(articleEntity, true, (long) favoriteCount)).collect(Collectors.toList());
     }
+
+    private ArticleDto convertEntityToDtos(ArticleDocument entity, Boolean favorited, Long favoritesCount) {
+        ProfileDto author = profileService.getProfileByUserIds(entity.getAuthor().getId());
+        return ArticleDto.builder()
+                .id(entity.getId())
+                .slug(entity.getSlug())
+                .title(entity.getTitle())
+                .description(entity.getDescription())
+                .body(entity.getBody())
+                .author(author)
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
+                .favorited(favorited)
+                .favoritesCount(favoritesCount)
+                .tagList(entity.getTagList())
+                .build();
+    }
+
+
 
 
 

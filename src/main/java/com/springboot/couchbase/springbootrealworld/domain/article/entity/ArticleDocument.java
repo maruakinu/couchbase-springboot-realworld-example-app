@@ -9,6 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.CascadeType;
@@ -25,7 +27,8 @@ import java.util.List;
 @Document
 public class ArticleDocument {
     @Id
-    protected Long id;
+    @GeneratedValue(strategy = GenerationStrategy.UNIQUE)
+    protected String id;
     @Field
     private String slug;
     @Field
@@ -50,7 +53,7 @@ public class ArticleDocument {
     private UserDocument author;
 
     @Builder
-    public ArticleDocument(Long id, String slug, String title, String description, String body, List<String>  taglist, UserDocument author) {
+    public ArticleDocument(String id, String slug, String title, String description, String body, List<String> taglist, UserDocument author) {
         this.id = id;
         this.slug = slug;
         this.title = title;

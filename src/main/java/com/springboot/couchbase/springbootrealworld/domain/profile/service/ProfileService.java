@@ -12,5 +12,9 @@ public interface ProfileService {
 
     ProfileDto unfollowUser(final String name, final AuthUserDetails authUserDetails);
 
-    ProfileDto getProfileByUserId(Long userId, AuthUserDetails authUserDetails);
+    ProfileDto getProfileByUserId(String userId, AuthUserDetails authUserDetails);
+
+//    ProfileDto getProfileByEmail(String email, AuthUserDetails authUserDetails);
+
+    ProfileDto getProfileByUserIds(String userId);
 }

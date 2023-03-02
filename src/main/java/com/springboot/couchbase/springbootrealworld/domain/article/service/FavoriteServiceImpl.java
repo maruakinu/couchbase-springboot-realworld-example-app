@@ -41,7 +41,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public List<FavoriteDto> getFavoritesBySlug(String slug, AuthUserDetails authUserDetails) {
-        Long articleId = articleRepository.findBySlug(slug).getId();
+        String articleId = articleRepository.findBySlug(slug).getId();
         List<FavoriteDocument> favoriteEntities = favoriteRepository.findByArticleId(articleId);
         return favoriteEntities.stream().map(favoriteEntity -> convertToDTO(authUserDetails, favoriteEntity)).collect(Collectors.toList());
     }
@@ -50,7 +50,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public void delete(String slug, AuthUserDetails authUserDetails) {
 
-        Long articleId = articleRepository.findBySlug(slug).getId();
+        String articleId = articleRepository.findBySlug(slug).getId();
         List<FavoriteDocument> favoriteEntities = favoriteRepository.findByArticleId(articleId);
         favoriteRepository.deleteAll(favoriteEntities);
 

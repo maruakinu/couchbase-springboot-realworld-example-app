@@ -4,11 +4,14 @@ import com.springboot.couchbase.springbootrealworld.domain.article.dto.ArticleDt
 import com.springboot.couchbase.springbootrealworld.domain.user.dto.UserDto;
 import com.springboot.couchbase.springbootrealworld.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -16,10 +19,20 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
+//    @PostMapping
+//    public UserDto.SingleUser<UserDto> registration(@RequestBody UserDto.@NotNull SingleUser<UserDto> article) {
+//        return new UserDto.SingleUser<>(userService.registration(article.getUser()));
+//    }
+
     @PostMapping
-    public UserDto.SingleUser<UserDto> registration(@RequestBody UserDto.SingleUser<UserDto> article) {
-        return new UserDto.SingleUser<>(userService.registration(article.getUser()));
+    public UserDto registration(@RequestBody @Valid UserDto.Registration registration) {
+        return userService.registration(registration);
     }
+
+//    @PostMapping
+//    public UserDto registration(@RequestBody @Valid UserDto.Registration registration) {
+//        return userService.registration(registration);
+//    }
 
 //    @PostMapping
 //    public UserDto registration(@RequestBody UserDto.Registration registration) {

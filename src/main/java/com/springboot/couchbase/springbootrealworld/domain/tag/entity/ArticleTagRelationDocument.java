@@ -36,7 +36,8 @@ import java.util.List;
 @Document
 public class ArticleTagRelationDocument{
     @Id
-    protected Long id;
+    @GeneratedValue(strategy = GenerationStrategy.UNIQUE)
+    protected String id;
 
     @Field
     private String tag;

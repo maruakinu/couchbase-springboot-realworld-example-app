@@ -19,6 +19,7 @@ public class UserController {
     @GetMapping
     public UserDto currentUser(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
         // TODO: userService.getUser(userId: String) 로 변경
+//        AuthUserDetails authDetails = new AuthUserDetails("5c863c84-6860-4d17-b86d-88508d875a26", "marlo@gmail.com", "");
         return userService.currentUser(authUserDetails);
     }
 

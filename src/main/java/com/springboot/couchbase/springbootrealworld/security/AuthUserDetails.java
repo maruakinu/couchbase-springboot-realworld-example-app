@@ -7,19 +7,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class AuthUserDetails implements UserDetails {
-    private final Long id;
+    private final String id;
     private final String email;
 
     private final String bio;
 
     @Builder
-    public AuthUserDetails(Long id, String email, String bio) {
+    public AuthUserDetails(String id, String email, String bio) {
         this.id = id;
         this.email = email;
         this.bio = bio;
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 

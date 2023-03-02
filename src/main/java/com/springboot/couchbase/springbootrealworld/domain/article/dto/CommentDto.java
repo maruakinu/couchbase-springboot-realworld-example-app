@@ -11,7 +11,8 @@ import java.util.List;
 @Setter
 @Builder
 public class CommentDto {
-    private Long id;
+
+    protected String id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String body;

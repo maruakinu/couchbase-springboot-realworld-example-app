@@ -19,10 +19,12 @@ import java.util.List;
 @Collection("article")
 public interface ArticleRepository extends CrudRepository<ArticleDocument, Long> {
     ArticleDocument findBySlug(String slug);
+
+    List<ArticleDocument> findByAuthorId(String author);
     @Query("#{#n1ql.selectEntity} WHERE title IS NOT NULL AND #{#n1ql.filter} ORDER BY createdAt DESC")
     ArticleDocument findBySlugs();
-    @Query("#{#n1ql.selectEntity} WHERE author.id IS NOT NULL AND #{#n1ql.filter}")
-    List<ArticleDocument> findByAuthorId(List<Long> id, Pageable pageable);
+    @Query("#{#n1ql.selectEntity} WHERE title IS NOT NULL AND #{#n1ql.filter}")
+    List<ArticleDocument> findByAuthorId(List<String> id, Pageable pageable);
 
     @Query("#{#n1ql.selectEntity} WHERE title IS NOT NULL AND #{#n1ql.filter} ORDER BY createdAt DESC")
     List<ArticleDocument> findAllArticles();

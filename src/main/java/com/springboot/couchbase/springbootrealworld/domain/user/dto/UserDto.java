@@ -11,9 +11,11 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @Setter
 @Builder
+@JsonTypeName("user")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
 public class UserDto {
 
-    protected Long id;
+    protected String id;
     private String email;
     private String token;
     private String username;
@@ -22,18 +24,20 @@ public class UserDto {
     private String image;
 
 
-    @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class SingleUser<T> {
-        private T user;
-    }
+//    @Getter
+//    @Builder
+//    @NoArgsConstructor
+//    @AllArgsConstructor
+//    public static class SingleUser<T> {
+//        private T user;
+//    }
 
     @Getter
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
+    @JsonTypeName("user")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT)
     public static class Registration {
 
         private String username;

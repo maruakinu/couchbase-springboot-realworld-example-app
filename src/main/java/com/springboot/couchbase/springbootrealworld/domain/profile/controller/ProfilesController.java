@@ -23,7 +23,6 @@ public class ProfilesController {
         return new ProfileDto.Single(profileService.getProfile(name, authUserDetails));
     }
 
-
     @PostMapping("/{username}/follow")
     public ProfileDto.Single followUser(@PathVariable("username") String name, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
         return new ProfileDto.Single(profileService.followUser(name, authUserDetails));

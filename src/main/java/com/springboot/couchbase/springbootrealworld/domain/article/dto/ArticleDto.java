@@ -13,18 +13,20 @@ import java.util.List;
 @Builder
 public class ArticleDto {
 
-    protected Long id;
+    protected String id;
     private String slug;
     private String title;
     private String description;
     private String body;
+//    private List<String>  tagList;
+
     private List<String>  tagList;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private Boolean favorited;
     private Long favoritesCount;
     private ProfileDto author;
-    private ProfileDto favoritedBy;
+//    private ProfileDto favoritedBy;
 
 
 

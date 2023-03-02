@@ -1,6 +1,7 @@
 package com.springboot.couchbase.springbootrealworld.domain.article.service;
 
 import com.springboot.couchbase.springbootrealworld.domain.article.dto.ArticleDto;
+import com.springboot.couchbase.springbootrealworld.domain.article.dto.CommentDto;
 import com.springboot.couchbase.springbootrealworld.domain.article.dto.FavoriteDto;
 import com.springboot.couchbase.springbootrealworld.domain.article.model.FeedParams;
 import com.springboot.couchbase.springbootrealworld.security.AuthUserDetails;
@@ -8,6 +9,8 @@ import com.springboot.couchbase.springbootrealworld.security.AuthUserDetails;
 import java.util.List;
 
 public interface ArticleService {
+
+//    ArticleDto createArticle(final ArticleDto article, final AuthUserDetails authUserDetails);
 
     ArticleDto createArticle(final ArticleDto article, final AuthUserDetails authUserDetails);
 
@@ -22,12 +25,13 @@ public interface ArticleService {
 
     ArticleDto favoriteArticle(final String slug, final AuthUserDetails authUserDetails);
 
+
 //    void unfavoriteArticle(final String slug, final AuthUserDetails authUserDetails);
  //   void unfavoriteArticle(final String slug);
 
 //    String unfavoriteArticle(final String slug);
 
-    ArticleDto unfavoriteArticle(final String slug, final AuthUserDetails authUserDetails);
+  //  ArticleDto unfavoriteArticle(final String slug, final AuthUserDetails authUserDetails);
 
  //   List<ArticleDto> listArticle(final ArticleQueryParam articleQueryParam, final AuthUserDetails authUserDetails);
 
@@ -35,7 +39,9 @@ public interface ArticleService {
 
     List<ArticleDto> getAllArticles(final AuthUserDetails authUserDetails);
 
-    List<ArticleDto> getAllArticlesYouFollow(final AuthUserDetails authUserDetails);
+    List<ArticleDto> getAllArticlesYouFollow();
+
+  //  ArticleDto getArticle(final String slug, final AuthUserDetails authUserDetails);
 
 
 

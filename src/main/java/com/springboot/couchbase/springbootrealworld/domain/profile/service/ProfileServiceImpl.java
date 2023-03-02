@@ -26,7 +26,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileDto getProfile(String name, AuthUserDetails authUserDetails) {
         UserDocument user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
-        Boolean following = followRepository.findByFolloweeIdAndFollowerId(user.getId(), authUserDetails.getId()).isPresent();
+        Boolean following = followRepository.findByFolloweeIdAndFollowerId(user.getId(), String.valueOf(authUserDetails.getId())).isPresent();
 
         return convertToProfile(user, following);
     }
@@ -36,7 +36,7 @@ public class ProfileServiceImpl implements ProfileService {
     public ProfileDto followUser(String name, AuthUserDetails authUserDetails) {
         UserDocument followee = userRepository.findByUsername(name).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
         UserDocument follower = UserDocument.builder()
-                .id(authUserDetails.getId())
+                .id(String.valueOf(authUserDetails.getId()))
                 .build(); // myself
 
         followRepository.findByFolloweeIdAndFollowerId(followee.getId(), follower.getId())
@@ -52,7 +52,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Override
     public ProfileDto unfollowUser(String name, AuthUserDetails authUserDetails) {
         UserDocument followee = userRepository.findByUsername(name).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
-        UserDocument follower = UserDocument.builder().id(authUserDetails.getId()).build(); // myself
+        UserDocument follower = UserDocument.builder().id(String.valueOf(authUserDetails.getId())).build(); // myself
 
         FollowDocument follow = followRepository.findByFolloweeIdAndFollowerId(followee.getId(), follower.getId())
                 .orElseThrow(() -> new AppException(Error.FOLLOW_NOT_FOUND));
@@ -62,9 +62,10 @@ public class ProfileServiceImpl implements ProfileService {
     }
 
     @Override
-    public ProfileDto getProfileByUserId(Long userId, AuthUserDetails authUserDetails) {
-        UserDocument user = userRepository.findById(userId).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
-        Boolean following = followRepository.findByFolloweeIdAndFollowerId(user.getId(), authUserDetails.getId()).isPresent();
+    public ProfileDto getProfileByUserId(String userId, AuthUserDetails authUserDetails) {
+        UserDocument user = userRepository.findByEmail(authUserDetails.getEmail()).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
+//        UserDocument user = userRepository.findById(Long.valueOf(userId)).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
+        Boolean following = followRepository.findByFolloweeIdAndFollowerId(user.getId(), String.valueOf(authUserDetails.getId())).isPresent();
         return convertToProfile(user, following);
     }
 
@@ -76,6 +77,20 @@ public class ProfileServiceImpl implements ProfileService {
                 .bio(user.getBio())
                 .image(user.getImage())
                 .following(following)
+                .build();
+    }
+
+    @Override
+    public ProfileDto getProfileByUserIds(String userId) {
+        UserDocument user = userRepository.findById(userId).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
+        return convertToProfiles(user);
+    }
+
+    private ProfileDto convertToProfiles(UserDocument user) {
+        return ProfileDto.builder()
+                .username(user.getUsername())
+                .bio(user.getBio())
+                .image(user.getImage())
                 .build();
     }
 }

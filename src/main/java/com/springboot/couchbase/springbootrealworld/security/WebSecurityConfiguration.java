@@ -21,6 +21,7 @@ public class WebSecurityConfiguration {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // TODO: CORS 허용 관련 내용 추가
@@ -29,16 +30,20 @@ public class WebSecurityConfiguration {
                 .formLogin().disable()
                 .authorizeRequests()
                 .antMatchers("/users/**",
-                        "/authenticate",
-                        "/swagger-resources/**",
-                        "/swagger-ui/**",
-                        "/v3/api-docs",
-                        "/webjars/**").permitAll()
+                        "/tags/**",
+                        "/articles/**").permitAll()
+//                .antMatchers("/users/**",
+//                        "/authenticate",
+//                        "/swagger-resources/**",
+//                        "/swagger-ui/**",
+//                        "/v3/api-docs",
+//                        "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .cors();
 
         return http.build();
     }

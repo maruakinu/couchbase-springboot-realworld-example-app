@@ -15,6 +15,7 @@ import com.springboot.couchbase.springbootrealworld.domain.article.service.Comme
 import com.springboot.couchbase.springbootrealworld.domain.article.service.FavoriteService;
 import com.springboot.couchbase.springbootrealworld.security.AuthUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -46,8 +47,16 @@ public class ArticleController {
         //this.dbProperties = dbProperties;
     //}
 
+//    @PostMapping
+//    public ArticleDto.SingleArticle<ArticleDto> createArticle(@RequestBody ArticleDto.SingleArticle<ArticleDto> article, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
+//        AuthUserDetails authDetails = new AuthUserDetails(2L, "marloaquino080621@gmail.com", null);
+//        return new ArticleDto.SingleArticle<>(articleService.createArticle(article.getArticle(), authDetails));
+//    }
+
+
     @PostMapping
     public ArticleDto.SingleArticle<ArticleDto> createArticle(@RequestBody ArticleDto.SingleArticle<ArticleDto> article, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
+//        AuthUserDetails authDetails = new AuthUserDetails(2L, "marloaquino080621@gmail.com", null);
         return new ArticleDto.SingleArticle<>(articleService.createArticle(article.getArticle(), authUserDetails));
     }
 
@@ -66,6 +75,20 @@ public class ArticleController {
         articleService.deleteArticle(slug, authUserDetails);
     }
 
+//    @PostMapping("/{slug}/comments")
+//    public CommentDto.SingleComment addCommentsToAnArticle(@PathVariable String slug, @RequestBody CommentDto.SingleComment comment, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
+//        return CommentDto.SingleComment.builder()
+//                .comment(commentService.addCommentsToAnArticle(slug, comment.getComment(), authUserDetails))
+//                .build();
+//    }
+
+//    @PostMapping("/{slug}/comments")
+//    public CommentDto.SingleComment addCommentsToAnArticle(@PathVariable String slug, @RequestBody CommentDto.@NotNull SingleComment comment, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
+//        return CommentDto.SingleComment.builder()
+//                .comment(commentService.addCommentsToAnArticle(slug, comment.getComment(), authUserDetails))
+//                .build();
+//    }
+
     @PostMapping("/{slug}/comments")
     public CommentDto.SingleComment addCommentsToAnArticle(@PathVariable String slug, @RequestBody CommentDto.SingleComment comment, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
         return CommentDto.SingleComment.builder()
@@ -73,16 +96,16 @@ public class ArticleController {
                 .build();
     }
 
+
     @GetMapping("/{slug}/comments")
     public CommentDto.MultipleComments getCommentsFromAnArticle(@PathVariable String slug, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
         return CommentDto.MultipleComments.builder()
                 .comments(commentService.getCommentsBySlug(slug, authUserDetails))
                 .build();
     }
-
-    @DeleteMapping("/{slug}/comments/{commentId}")
-    public void deleteComment(@PathVariable("slug") String slug, @PathVariable("commentId") Long commentId, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
-        commentService.delete(slug, commentId, authUserDetails);
+    @DeleteMapping("/comments/{commentId}")
+    public void deleteComment(@PathVariable("commentId") String commentId, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
+        commentService.delete(commentId, authUserDetails);
     }
 
     @PostMapping("/{slug}/favorite")
@@ -97,15 +120,15 @@ public class ArticleController {
                 .build();
     }
 
-    @DeleteMapping("/{slug}/favorite/delete")
+    @DeleteMapping("/{slug}/favorite")
     public void deleteFavorite(@PathVariable("slug") String slug, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
         favoriteService.delete(slug, authUserDetails);
     }
 
-    @DeleteMapping("/{slug}/favorite")
-    public ArticleDto.SingleArticle<ArticleDto> unfavoriteArticle(@PathVariable String slug, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
-        return new ArticleDto.SingleArticle<>(articleService.unfavoriteArticle(slug, authUserDetails));
-    }
+//    @DeleteMapping("/{slug}/favorite")
+//    public ArticleDto.SingleArticle<ArticleDto> unfavoriteArticle(@PathVariable String slug, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
+//        return new ArticleDto.SingleArticle<>(articleService.unfavoriteArticle(slug, authUserDetails));
+//    }
 
 //    @DeleteMapping("/{slug}/favorite")
 //    public void unfavoriteArticle(@PathVariable String slug) {
@@ -134,25 +157,48 @@ public class ArticleController {
 //        return ArticleDto.MultipleArticle.builder().articles(articleService.listArticle(articleQueryParam, authUserDetails)).build();
 //    }
 
-    @GetMapping("/feed")
+    @GetMapping("/all")
     public ArticleDto.MultipleArticle feedArticles(@ModelAttribute @Valid FeedParams feedParams, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
         return ArticleDto.MultipleArticle.builder().articles(articleService.feedArticles(authUserDetails, feedParams)).build();
     }
     // Get All Articles
 
-    @GetMapping("/all")
+//    @GetMapping("/feed")
+//    public ArticleDto.MultipleArticle getArticles(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
+////       AuthUserDetails authDetails = new AuthUserDetails(2L, "marloaquino080621@gmail.com", null);
+//        return ArticleDto.MultipleArticle.builder()
+//                .articles(articleService.getAllArticles(authUserDetails))
+//                .build();
+//    }
+
+    @GetMapping("/feed")
     public ArticleDto.MultipleArticle getArticles(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
         return ArticleDto.MultipleArticle.builder()
                 .articles(articleService.getAllArticles(authUserDetails))
                 .build();
     }
 
-    @GetMapping("/follow")
-    public ArticleDto.MultipleArticle getArticlesYouFollow(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
+
+//    @GetMapping
+//    public ArticleDto.MultipleArticle getArticlesYouFollow(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
+//        return ArticleDto.MultipleArticle.builder()
+//                .articles(articleService.getAllArticlesYouFollow(authUserDetails))
+//                .build();
+//    }
+
+    @GetMapping
+    public ArticleDto.MultipleArticle getArticlesYouFollow() {
         return ArticleDto.MultipleArticle.builder()
-                .articles(articleService.getAllArticlesYouFollow(authUserDetails))
+                .articles(articleService.getAllArticlesYouFollow())
                 .build();
     }
+
+//    @GetMapping("/follow")
+//    public ArticleDto.MultipleArticle getArticlesYouFollow(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
+//        return ArticleDto.MultipleArticle.builder()
+//                .articles(articleService.getAllArticlesYouFollow(authUserDetails))
+//                .build();
+//    }
 
 
 

@@ -27,7 +27,7 @@ public class UserDocument extends BaseDocument {
     private String image;
 
     @Builder
-    public UserDocument(Long id, String username, String email, String password, String bio, String image) {
+    public UserDocument(String id, String username, String email, String password, String bio, String image) {
         this.id = id;
         this.username = username;
         this.email = email;

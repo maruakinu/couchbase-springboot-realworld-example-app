@@ -9,6 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
+import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
+import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +21,8 @@ import java.time.LocalDateTime;
 @Document
 public class CommentDocument {
     @Id
-    protected Long id;
+    @GeneratedValue(strategy = GenerationStrategy.UNIQUE)
+    protected String id;
     @Field
     private LocalDateTime createdAt = LocalDateTime.now();
     @Field

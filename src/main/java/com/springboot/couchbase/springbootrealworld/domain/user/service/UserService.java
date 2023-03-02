@@ -5,9 +5,9 @@ import com.springboot.couchbase.springbootrealworld.domain.user.dto.UserDto;
 import com.springboot.couchbase.springbootrealworld.security.AuthUserDetails;
 
 public interface UserService {
-    UserDto registration(final UserDto registration);
+ //   UserDto registration(final UserDto registration);
 
-//    UserDto registration(final UserDto.Registration registration);
+   UserDto registration(final UserDto.Registration registration);
 
     UserDto login(final UserDto.Login login);
 

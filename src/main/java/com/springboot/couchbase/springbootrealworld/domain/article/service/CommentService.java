@@ -11,5 +11,5 @@ public interface CommentService {
 
     List<CommentDto> getCommentsBySlug(final String slug, final AuthUserDetails authUserDetails);
 
-    void delete(final String slug, final Long commentId, final AuthUserDetails authUserDetails);
+    void delete(final String commentId, final AuthUserDetails authUserDetails);
 }

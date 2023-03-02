@@ -22,7 +22,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private final UserRepository userRepository;
 
-    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
     @Autowired
     private JwtUtils jwtUtils;
 
@@ -38,18 +39,31 @@ public class UserServiceImpl implements UserService {
 //    //    return convertEntityToDto(userDocument);
 //    }
 
+//    @Override
+//    public UserDto registration(UserDto registration) {
+//        userRepository.findByUsernameOrEmail(registration.getUsername(), registration.getEmail()).stream().findAny().ifPresent(entity -> {throw new AppException(Error.DUPLICATED_USER);});
+//        UserDocument userDocument = UserDocument.builder()
+////                .id(registration.getId())
+//                .username(registration.getUsername())
+//                .email(registration.getEmail())
+//                .password(passwordEncoder.encode(registration.getPassword()))
+//                .bio("")
+//                .build();
+//        userRepository.save(userDocument);
+//        return convertEntityToDto(userDocument);
+//    }
+
     @Override
-    public UserDto registration(UserDto registration) {
+    public UserDto registration(final UserDto.Registration registration) {
         userRepository.findByUsernameOrEmail(registration.getUsername(), registration.getEmail()).stream().findAny().ifPresent(entity -> {throw new AppException(Error.DUPLICATED_USER);});
-        UserDocument userDocument = UserDocument.builder()
-                .id(registration.getId())
+        UserDocument userEntity = UserDocument.builder()
                 .username(registration.getUsername())
                 .email(registration.getEmail())
-                .password(registration.getPassword())
+                .password(passwordEncoder.encode(registration.getPassword()))
                 .bio("")
                 .build();
-        userRepository.save(userDocument);
-        return convertEntityToDto(userDocument);
+        userRepository.save(userEntity);
+        return convertEntityToDto(userEntity);
     }
 
 //    @Override
@@ -62,7 +76,8 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public UserDto login(UserDto.Login login) {
-        UserDocument userDocument = userRepository.findByEmail(login.getEmail()).orElseThrow(() -> new AppException(Error.LOGIN_INFO_INVALID));
+        UserDocument userDocument = userRepository.findByEmail(login.getEmail()).filter(user -> passwordEncoder.matches(login.getPassword(), user.getPassword())).orElseThrow(() -> new AppException(Error.LOGIN_INFO_INVALID));
+   //     UserDocument userDocument = userRepository.findByEmail(login.getEmail()).orElseThrow(() -> new AppException(Error.LOGIN_INFO_INVALID));
    //     UserDocument userDocument = userRepository.findByEmail(login.getEmail()).orElseThrow(() -> new AppException(Error.LOGIN_INFO_INVALID));
         System.out.println("Login : " + login.getEmail());
         return convertEntityToDto(userDocument);
@@ -71,13 +86,13 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public UserDto currentUser(AuthUserDetails authUserDetails) {
-        UserDocument userEntity = userRepository.findById(authUserDetails.getId()).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
+        UserDocument userEntity = userRepository.findByEmail(authUserDetails.getEmail()).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
         return convertEntityToDto(userEntity);
     }
 
     @Override
     public UserDto update(UserDto.Update update, AuthUserDetails authUserDetails) {
-        UserDocument userDocument = userRepository.findById(authUserDetails.getId()).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
+        UserDocument userDocument = userRepository.findByEmail(authUserDetails.getEmail()).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
 
         if (update.getUsername() != null) {
             userRepository.findByUsername(update.getUsername())
@@ -132,6 +147,16 @@ public class UserServiceImpl implements UserService {
                 .token(jwtUtils.encode(userEntity.getEmail()))
                 .build();
     }
+
+//    private UserDto convertEntityToDtos(UserDocument userEntity) {
+//        return UserDto.builder()
+//                .username(userEntity.getUsername())
+//                .bio(userEntity.getBio())
+//                .email(userEntity.getEmail())
+//                .image(userEntity.getImage())
+//                .token(jwtUtils.encode(userEntity.getEmail()))
+//                .build();
+//    }
 
 //    private UserDto convertEntityToDto(UserDocument userDocument) {
 //        return UserDto.builder()

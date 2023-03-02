@@ -1,5 +1,6 @@
 package com.springboot.couchbase.springbootrealworld.domain.user.repository;
 
+import com.springboot.couchbase.springbootrealworld.domain.profile.entity.FollowDocument;
 import com.springboot.couchbase.springbootrealworld.domain.user.entity.UserDocument;
 import org.springframework.data.couchbase.repository.Collection;
 import org.springframework.data.couchbase.repository.Scope;
@@ -19,7 +20,10 @@ public interface UserRepository extends CrudRepository<UserDocument, Long> {
     List<UserDocument> findByUsernameOrEmail(String username, String email);
     Optional<UserDocument> findByEmail(String email);
 
+    Optional<UserDocument> findById(String id);
+
     Optional<UserDocument> findByUsername(String username);
+
 
 }
 

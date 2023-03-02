@@ -13,8 +13,8 @@ import java.util.Optional;
 @Scope("Couchbase")
 @Collection("follow")
 public interface FollowRepository extends CrudRepository<FollowDocument, Long> {
-    Optional<FollowDocument> findByFolloweeIdAndFollowerId(Long followeeId, Long followerId);
+    Optional<FollowDocument> findByFolloweeIdAndFollowerId(String followeeId, String followerId);
 
-    List<FollowDocument> findByFollowerId(Long id);
+    List<FollowDocument> findByFollowerId(String id);
 
 }

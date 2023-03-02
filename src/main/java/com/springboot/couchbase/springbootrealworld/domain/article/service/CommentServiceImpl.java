@@ -33,6 +33,24 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private ProfileService profileService;
 
+//    @Transactional
+//    @Override
+//    public CommentDto addCommentsToAnArticle(String slug, CommentDto comment, AuthUserDetails authUserDetails) {
+//        ArticleDocument found = articleRepository.findBySlug(slug);
+//        ArticleDocument articleDocument = articleRepository.findBySlug(slug);
+//        CommentDocument commentDocument = CommentDocument.builder()
+//                .article(found)
+//                .body(comment.getBody())
+//                .author(UserDocument.builder()
+//                        .id(authUserDetails.getId())
+//                        .build())
+//                .article(articleDocument)
+//                .build();
+//        commentRepository.save(commentDocument);
+//
+//        return convertToDTO(authUserDetails, commentDocument);
+//    }
+
     @Transactional
     @Override
     public CommentDto addCommentsToAnArticle(String slug, CommentDto comment, AuthUserDetails authUserDetails) {
@@ -53,7 +71,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<CommentDto> getCommentsBySlug(String slug, AuthUserDetails authUserDetails) {
 
-            Long articleId = articleRepository.findBySlug(slug).getId();
+            String articleId = articleRepository.findBySlug(slug).getId();
             List<CommentDocument> commentEntities = commentRepository.findByArticleIdOrderByCreatedAtDesc(articleId);
             return commentEntities.stream().map(commentEntity -> convertToDTO(authUserDetails, commentEntity)).collect(Collectors.toList());
 
@@ -61,18 +79,14 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public void delete(String slug, Long commentId, AuthUserDetails authUserDetails) {
-        Long articleId = articleRepository.findBySlug(slug).getId();
-
-        CommentDocument commentEntity = commentRepository.findById(commentId)
-                .filter(comment -> comment.getArticle().getId().equals(articleId))
-                .orElseThrow();
-
-        commentRepository.deleteById(commentEntity.getId());
+    public void delete(String commentId, AuthUserDetails authUserDetails) {
+//        String articleId = articleRepository.findBySlug(slug).getId();
+        List<CommentDocument> commentEntity = commentRepository.findById(commentId);
+        commentRepository.deleteAll(commentEntity);
     }
 
     private CommentDto convertToDTO(AuthUserDetails authUserDetails, CommentDocument commentDocument) {
-        ProfileDto author = profileService.getProfileByUserId(commentDocument.getAuthor().getId(), authUserDetails);
+        ProfileDto author = profileService.getProfileByUserId(commentDocument.getAuthor().getEmail(), authUserDetails);
         return CommentDto.builder()
                 .id(commentDocument.getId())
                 .createdAt(commentDocument.getCreatedAt())
@@ -81,4 +95,17 @@ public class CommentServiceImpl implements CommentService {
                 .author(author)
                 .build();
     }
+
+
+    private CommentDto convertToDTOs( CommentDocument commentDocument) {
+//        ProfileDto author = profileService.getProfileByUserId(commentDocument.getAuthor().getEmail());
+        return CommentDto.builder()
+                .id(commentDocument.getId())
+                .createdAt(commentDocument.getCreatedAt())
+                .updatedAt(commentDocument.getUpdatedAt())
+                .body(commentDocument.getBody())
+//                .author(author)
+                .build();
+    }
+
 }

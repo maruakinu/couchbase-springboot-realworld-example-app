@@ -2,6 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/couchbase-springboot/spring-boot-realworld/RealWorld-Couchbase-Capella" vcs="Git" />
   </component>
 </project>
