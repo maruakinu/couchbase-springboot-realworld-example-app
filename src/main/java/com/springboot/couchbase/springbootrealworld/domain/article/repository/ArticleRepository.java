@@ -29,22 +29,11 @@ public interface ArticleRepository extends CrudRepository<ArticleDocument, Long>
     @Query("#{#n1ql.selectEntity} WHERE title IS NOT NULL AND #{#n1ql.filter} ORDER BY createdAt DESC")
     List<ArticleDocument> findAllArticles();
 
-  //  @Query("#{#n1ql.selectEntity} WHERE author.fllw = true AND #{#n1ql.filter}")
-   // @Query("#{#n1ql.selectEntity} SELECT a FROM ArticleDocument a LEFT JOIN FollowDocument f ON f.followee.id = a.author.id WHERE a.title IS NOT NULL AND #{#n1ql.filter} ORDER BY a.createdAt DESC")
     @Query("#{#n1ql.selectEntity} WHERE title IS NOT NULL AND #{#n1ql.filter} ORDER BY createdAt DESC")
     List<ArticleDocument> findAllArticlesYouFollow();
 
     @Query("#{#n1ql.selectEntity} WHERE title IS NOT NULL AND #{#n1ql.filter}")
     List<ArticleDocument> findAllTags();
 
-
-//    @Query("SELECT a FROM ArticleDocument a LEFT JOIN FavoriteDocument f ON f.article.id = a.id ORDER BY a.createdAt DESC")
-//    List<ArticleDocument> findListByPaging(Pageable pageable);
-//    @Query("SELECT a FROM ArticleDocument a LEFT JOIN FavoriteDocument f ON f.article.id = a.id WHERE a.author.username = :username ORDER BY a.createdAt DESC")
-//    List<ArticleDocument> findByAuthorName(String username, Pageable pageable);
-//    @Query("SELECT a FROM ArticleDocument a JOIN ArticleTagRelationEntity t ON t.article.id = a.id LEFT JOIN FavoriteDocument f ON f.article.id = a.id WHERE t.tag = :tag ORDER BY a.createdAt DESC")
-//    List<ArticleDocument> findByTag( String tag, Pageable pageable);
-//    @Query("SELECT a FROM ArticleDocument a LEFT JOIN FavoriteDocument f ON f.article.id = a.id WHERE f.user.username = :username ORDER BY a.createdAt DESC")
-//    List<ArticleDocument> findByFavoritedUsername(String username, Pageable pageable);
 
 }

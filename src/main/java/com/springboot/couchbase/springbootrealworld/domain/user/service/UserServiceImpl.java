@@ -28,30 +28,6 @@ public class UserServiceImpl implements UserService {
     private JwtUtils jwtUtils;
 
 
-//    @Override
-//    public UserDto registration(final UserDto.Registration registration) {
-//  //      JwtUtils u = new JwtUtils("String", 1L);
-//        userRepository.findByUsernameOrEmail(registration.getUsername(), registration.getEmail()).stream().findAny().ifPresent(entity -> {throw new AppException(Error.DUPLICATED_USER);});
-//        UserDocument userDocument = UserDocument.builder().username(registration.getUsername()).email(registration.getEmail()).build();
-//        userRepository.save(userDocument);
-//        return UserDto.builder().username(userDocument.getUsername()).bio(userDocument.getBio()).email(userDocument.getEmail()).image(userDocument.getImage()).build();
-// //       return UserDto.builder().username(userDocument.getUsername()).bio(userDocument.getBio()).email(userDocument.getEmail()).image(userDocument.getImage()).token(u.encode(userDocument.getEmail())).build();
-//    //    return convertEntityToDto(userDocument);
-//    }
-
-//    @Override
-//    public UserDto registration(UserDto registration) {
-//        userRepository.findByUsernameOrEmail(registration.getUsername(), registration.getEmail()).stream().findAny().ifPresent(entity -> {throw new AppException(Error.DUPLICATED_USER);});
-//        UserDocument userDocument = UserDocument.builder()
-////                .id(registration.getId())
-//                .username(registration.getUsername())
-//                .email(registration.getEmail())
-//                .password(passwordEncoder.encode(registration.getPassword()))
-//                .bio("")
-//                .build();
-//        userRepository.save(userDocument);
-//        return convertEntityToDto(userDocument);
-//    }
 
     @Override
     public UserDto registration(final UserDto.Registration registration) {
@@ -66,19 +42,11 @@ public class UserServiceImpl implements UserService {
         return convertEntityToDto(userEntity);
     }
 
-//    @Override
-//    public UserDto registration(final UserDto.Registration registration) {
-//        UserDocument userDocument = UserDocument.builder().username(registration.getUsername()).email(registration.getEmail()).password(registration.getPassword()).bio("").build();
-//        userRepository.save(userDocument);
-//        return convertEntityToDto(userDocument);
-//    }
 
     @Transactional(readOnly = true)
     @Override
     public UserDto login(UserDto.Login login) {
         UserDocument userDocument = userRepository.findByEmail(login.getEmail()).filter(user -> passwordEncoder.matches(login.getPassword(), user.getPassword())).orElseThrow(() -> new AppException(Error.LOGIN_INFO_INVALID));
-   //     UserDocument userDocument = userRepository.findByEmail(login.getEmail()).orElseThrow(() -> new AppException(Error.LOGIN_INFO_INVALID));
-   //     UserDocument userDocument = userRepository.findByEmail(login.getEmail()).orElseThrow(() -> new AppException(Error.LOGIN_INFO_INVALID));
         System.out.println("Login : " + login.getEmail());
         return convertEntityToDto(userDocument);
     }
@@ -121,19 +89,6 @@ public class UserServiceImpl implements UserService {
         return convertEntityToDto(userDocument);
     }
 
-//    @Transactional(readOnly = true)
-//    @Override
-//    public UserDto login(UserDto.Login login) {
-//        UserDocument userDocument = userRepository.findByEmail(login.getEmail()).filter(user -> passwordEncoder.matches(login.getPassword(), user.getPassword())).orElseThrow(() -> new AppException(Error.LOGIN_INFO_INVALID));
-//        return convertEntityToDto(userDocument);
-//    }
-
-//    @Transactional(readOnly = true)
-//    @Override
-//    public UserDto currentUser(AuthUserDetails authUserDetails) {
-//        UserDocument userDocument = userRepository.findById(authUserDetails.getId()).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
-//        return convertEntityToDto(userDocument);
-//    }
 
 
     private UserDto convertEntityToDto(UserDocument userEntity) {
@@ -147,28 +102,6 @@ public class UserServiceImpl implements UserService {
                 .token(jwtUtils.encode(userEntity.getEmail()))
                 .build();
     }
-
-//    private UserDto convertEntityToDtos(UserDocument userEntity) {
-//        return UserDto.builder()
-//                .username(userEntity.getUsername())
-//                .bio(userEntity.getBio())
-//                .email(userEntity.getEmail())
-//                .image(userEntity.getImage())
-//                .token(jwtUtils.encode(userEntity.getEmail()))
-//                .build();
-//    }
-
-//    private UserDto convertEntityToDto(UserDocument userDocument) {
-//        return UserDto.builder()
-//                .id(userDocument.getId())
-//                .username(userDocument.getUsername())
-//                .bio(userDocument.getBio())
-//                .email(userDocument.getEmail())
-//                .image(userDocument.getImage())
-////                .token(jwtUtils.encode(userDocument.getEmail()))
-//                .build();
-//    }
-
 
 
 

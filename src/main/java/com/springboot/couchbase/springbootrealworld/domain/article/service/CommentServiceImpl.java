@@ -33,23 +33,6 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private ProfileService profileService;
 
-//    @Transactional
-//    @Override
-//    public CommentDto addCommentsToAnArticle(String slug, CommentDto comment, AuthUserDetails authUserDetails) {
-//        ArticleDocument found = articleRepository.findBySlug(slug);
-//        ArticleDocument articleDocument = articleRepository.findBySlug(slug);
-//        CommentDocument commentDocument = CommentDocument.builder()
-//                .article(found)
-//                .body(comment.getBody())
-//                .author(UserDocument.builder()
-//                        .id(authUserDetails.getId())
-//                        .build())
-//                .article(articleDocument)
-//                .build();
-//        commentRepository.save(commentDocument);
-//
-//        return convertToDTO(authUserDetails, commentDocument);
-//    }
 
     @Transactional
     @Override
@@ -80,7 +63,6 @@ public class CommentServiceImpl implements CommentService {
     @Transactional
     @Override
     public void delete(String commentId, AuthUserDetails authUserDetails) {
-//        String articleId = articleRepository.findBySlug(slug).getId();
         List<CommentDocument> commentEntity = commentRepository.findById(commentId);
         commentRepository.deleteAll(commentEntity);
     }

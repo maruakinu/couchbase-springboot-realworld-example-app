@@ -4,9 +4,6 @@ import java.util.List;
 
 public interface TagService {
 
-//    List<String> getAllTags();
-// //   List<String> listOfTags();
-
     List<String> getAllTagList();
 
 

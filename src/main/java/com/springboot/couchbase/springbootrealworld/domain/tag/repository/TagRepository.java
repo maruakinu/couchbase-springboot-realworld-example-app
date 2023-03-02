@@ -15,7 +15,6 @@ import java.util.List;
 @Collection("tags")
 public interface TagRepository extends CrudRepository<ArticleTagRelationDocument, Long> {
 
-  //  @Query("#{#n1ql.selectEntity} tagList AND #{#n1ql.filter}")
   @Query("#{#n1ql.selectEntity} WHERE tag IS NOT NULL AND #{#n1ql.filter}")
   List<ArticleTagRelationDocument> findAllTagList();
 }

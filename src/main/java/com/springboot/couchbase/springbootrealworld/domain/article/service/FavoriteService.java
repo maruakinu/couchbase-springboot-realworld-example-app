@@ -14,6 +14,5 @@ public interface FavoriteService {
 
     void delete(final String slug,  final AuthUserDetails authUserDetails);
 
-//    FavoriteDto getFavoriteByUserId(Long userId, AuthUserDetails authUserDetails);
 
 }

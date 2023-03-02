@@ -19,25 +19,12 @@ public class UsersController {
     @Autowired
     private UserService userService;
 
-//    @PostMapping
-//    public UserDto.SingleUser<UserDto> registration(@RequestBody UserDto.@NotNull SingleUser<UserDto> article) {
-//        return new UserDto.SingleUser<>(userService.registration(article.getUser()));
-//    }
 
     @PostMapping
     public UserDto registration(@RequestBody @Valid UserDto.Registration registration) {
         return userService.registration(registration);
     }
 
-//    @PostMapping
-//    public UserDto registration(@RequestBody @Valid UserDto.Registration registration) {
-//        return userService.registration(registration);
-//    }
-
-//    @PostMapping
-//    public UserDto registration(@RequestBody UserDto.Registration registration) {
-//        return userService.registration(registration);
-//    }
 
     @PostMapping("/login")
     public UserDto login(@RequestBody UserDto.Login login) {

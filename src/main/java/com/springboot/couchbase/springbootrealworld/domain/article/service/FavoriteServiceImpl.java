@@ -54,9 +54,6 @@ public class FavoriteServiceImpl implements FavoriteService {
         List<FavoriteDocument> favoriteEntities = favoriteRepository.findByArticleId(articleId);
         favoriteRepository.deleteAll(favoriteEntities);
 
-//        ArticleDocument found = articleRepository.findBySlug(slug);
-//        System.out.println("This is Slug " + found);
-//        favoriteRepository.deleteById(found.getId());
     }
 
     private FavoriteDto convertToDTO(AuthUserDetails authUserDetails, FavoriteDocument favoriteDocument) {
@@ -66,18 +63,6 @@ public class FavoriteServiceImpl implements FavoriteService {
                 .author(author)
                 .build();
     }
-
-//    @Override
-//    public FavoriteDto getFavoriteByUserId(Long userId, AuthUserDetails authUserDetails) {
-//        UserDocument user = userRepository.findById(userId).orElseThrow(() -> new AppException(Error.USER_NOT_FOUND));
-//        return convertToFavorite(user);
-//    }
-//
-//    private FavoriteDto convertToFavorite(UserDocument user) {
-//        return FavoriteDto.builder()
-//                .id(String.valueOf(user.getId()))
-//                .build();
-//    }
 
 
 }

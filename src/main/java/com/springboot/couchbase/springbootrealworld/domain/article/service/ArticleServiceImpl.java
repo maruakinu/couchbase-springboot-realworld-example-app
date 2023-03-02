@@ -70,19 +70,10 @@ public class ArticleServiceImpl implements ArticleService {
 
                         for (String tag: article.getTagList()) {
                             tagRepository.save(ArticleTagRelationDocument.builder()
-           //                             .id(article.getId())
                                         .article(articleDocument)
                                         .tag(tag)
                                         .build());
                             }
-//        List<ArticleTagRelationDocument> tagList = new ArrayList<>();
-//        for (String tag: article.getTagList()) {
-//            tagList.add(ArticleTagRelationDocument.builder()
-//                    .article(articleDocument)
-//                    .tag(tag)
-//                    .build());
-//        }
-//        tagRepository.save(tagList);
 
         articleRepository.save(articleDocument);
 
@@ -100,23 +91,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleDto getArticle(String slug, AuthUserDetails authUserDetails) {
         ArticleDocument result = articleRepository.findBySlug(slug);
-//        List<FavoriteDocument> favorites = result.getFavoriteList();
-////        Boolean favorited = favorites.stream().anyMatch(favoriteEntity -> favoriteEntity.getUser().getId().equals(authUserDetails.getId()));
-//        long favoriteCount = 1;
-//        Boolean favorited = true;
-
-       // ArticleDocument result = articleRepository.findBySlug(slug);
         List<FavoriteDocument> favoriteEntities = favoriteRepository.findAllFavorites();
-
-  //      List<FavoriteDocument> favorites = result.getFavoriteList();
-   //     Boolean favorited = favoriteEntities.stream().anyMatch(favoriteEntity -> favoriteEntity.getAuthor().getId().equals(authUserDetails.getId()));
-     //   int favoriteCount = (int) favoriteEntities.stream().count();
-
-    //    ArticleDocument result  = articleRepository.findBySlug(slug);
         Boolean favorited  = favoriteRepository.findByArticleIdAndAuthorEmail(result.getId(), authUserDetails.getEmail()).isPresent();
         int favoriteCount = (int) favoriteEntities.stream().count();
-
-  //      return favoriteEntities.stream().map(favoriteEntity -> convertToDTO(authUserDetails, favoriteEntity)).collect(Collectors.toList());
         return convertEntityToDto(result, favorited, (long) favoriteCount, authUserDetails);
     }
 
@@ -135,7 +112,6 @@ public class ArticleServiceImpl implements ArticleService {
                 .favorited(favorited)
                 .favoritesCount(favoritesCount)
                 .tagList(entity.getTagList().stream().collect(Collectors.toList()))
-                //.tagList(entity.getTagList())
                 .build();
     }
 
@@ -194,23 +170,6 @@ public class ArticleServiceImpl implements ArticleService {
 
 
 
-//    @Transactional
-//    @Override
-//    public ArticleDto unfavoriteArticle(String slug, AuthUserDetails authUserDetails) {
-//        ArticleDocument found = articleRepository.findBySlug(slug);
-//        FavoriteDocument favorite = found.getFavoriteList().stream()
-//                .filter(favoriteEntity -> favoriteEntity.getArticle().getId().equals(found.getId())
-//                        && favoriteEntity.getAuthor().getId().equals(authUserDetails.getId())).findAny()
-//                .orElseThrow(() -> new AppException(Error.FAVORITE_NOT_FOUND));
-//        found.getFavoriteList().remove(favorite); // cascade REMOVE
-//        return getArticle(slug, authUserDetails);
-//
-//    }
-
-
-
-
-
     private List<ArticleDto> convertToArticleList(List<ArticleDocument> articleEntities, AuthUserDetails authUserDetails) {
         return articleEntities.stream().map(entity -> {
             List<FavoriteDocument> favorites = entity.getFavoriteList();
@@ -226,12 +185,6 @@ public class ArticleServiceImpl implements ArticleService {
         List<String> feedAuthorIds = followRepository.findByFollowerId(authUserDetails.getId().toString()).stream().map(FollowDocument::getFollowee).map(UserDocument::getId).collect(Collectors.toList());
         return articleRepository.findByAuthorId(feedAuthorIds, PageRequest.of(feedParams.getOffset(), feedParams.getLimit())).stream().map(entity -> {
 
-//            List<FavoriteDocument> favorites = entity.getFavoriteList();
-//            Boolean favorited = favorites.stream().anyMatch(favoriteEntity -> favoriteEntity.getAuthor().getId().equals(authUserDetails.getId()));
-//            int favoriteCount = favorites.size();
-//            int favoriteCount = 1;
-//            Boolean favorited = true;
-
             List<FavoriteDocument> favoriteEntities = favoriteRepository.findAllFavorites();
             Boolean favoriteds  = favoriteRepository.findByAuthorEmail(authUserDetails.getEmail()).isPresent();
             int favoriteCounts = (int) favoriteEntities.stream().count();
@@ -244,14 +197,10 @@ public class ArticleServiceImpl implements ArticleService {
     public List<ArticleDto> getAllArticles(AuthUserDetails authUserDetails) {
 
         List<ArticleDocument> result = articleRepository.findByAuthorId(authUserDetails.getId());
-
         List<ArticleDocument> articleEntities = articleRepository.findAllArticles();
         List<FavoriteDocument> favoriteEntities = favoriteRepository.findAllFavorites();
         Boolean favorited  = favoriteRepository.findByAuthorEmail(authUserDetails.getEmail()).isPresent();
         int favoriteCount = (int) favoriteEntities.stream().count();
-
-//        int favoriteCounts = 1;
-//        Boolean favoriteds = true;
 
         return result.stream().map(articleEntity -> convertEntityToDto(articleEntity, favorited, (long) favoriteCount, authUserDetails)).collect(Collectors.toList());
     }
@@ -259,15 +208,10 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<ArticleDto> getAllArticlesYouFollow() {
 
-   //     ArticleDocument  result = articleRepository.findAllArticlesYouFollows();
         List<ArticleDocument> articleEntities = articleRepository.findAllArticlesYouFollow();
-//        int favoriteCount = 1;
-//        Boolean favorited = true;
         List<FavoriteDocument> favoriteEntities = favoriteRepository.findAllFavorites();
-//        Boolean favorited  = true;
-//        int favoriteCount = (int) favoriteEntities.stream().count();
- //       Boolean favorited  = favoriteRepository.findByAuthorId(result.getId()).isPresent();
         int favoriteCount = (int) favoriteEntities.stream().count();
+
         return articleEntities.stream().map(articleEntity -> convertEntityToDtos(articleEntity, true, (long) favoriteCount)).collect(Collectors.toList());
     }
 

@@ -23,7 +23,6 @@ public interface FavoriteRepository extends CrudRepository<FavoriteDocument, Lon
     List<FavoriteDocument> findBySlug(String slug);
     Optional<FavoriteDocument> findByArticleIdAndAuthorEmail(String articleId, String author);
 
-//    Optional<FavoriteDocument> findByAuthorId(String author);
 
     Optional<FavoriteDocument> findByAuthorEmail(String author);
 
@@ -32,8 +31,6 @@ public interface FavoriteRepository extends CrudRepository<FavoriteDocument, Lon
     @Query("#{#n1ql.selectEntity} WHERE author IS NOT NULL AND #{#n1ql.filter}")
     List<FavoriteDocument> findAllFavorites();
 
-
-  //  Optional<FavoriteDocument> findByFolloweeIdAndFollowerId(Long followeeId, Long followerId);
 
 
 }

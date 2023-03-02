@@ -24,13 +24,6 @@ public class UserDto {
     private String image;
 
 
-//    @Getter
-//    @Builder
-//    @NoArgsConstructor
-//    @AllArgsConstructor
-//    public static class SingleUser<T> {
-//        private T user;
-//    }
 
     @Getter
     @Builder

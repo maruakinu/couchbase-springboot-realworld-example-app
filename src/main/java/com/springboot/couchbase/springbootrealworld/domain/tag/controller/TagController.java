@@ -21,18 +21,6 @@ public class TagController {
     private TagService tagService;
 
 
-//    @GetMapping
-//    public TagDto.TagList listOfTags() {
-//        return TagDto.TagList.builder().tags(tagService.listOfTags()).build();
-//    }
-
-//    @GetMapping("/follow")
-//    public TagDto.TagList getArticlesYouFollow() {
-//        return TagDto.TagList.builder()
-//                .tagList(tagService.getAllTags())
-//                .build();
-//    }
-
     @GetMapping
     public TagDto.TagList getArticleTags() {
         return TagDto.TagList.builder()

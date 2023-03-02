@@ -34,29 +34,10 @@ public class ArticleController {
     @Autowired
     private FavoriteService favoriteService;
 
-    //private Cluster cluster;
-    //private Collection articleCol;
-    //private DBProperties dbProperties;
-    //private Bucket bucket;
-
-    //public ArticleController( Cluster cluster, Bucket bucket, DBProperties dbProperties) {
-        //System.out.println("Initializing profile controller, cluster: " + cluster + "; bucket: " + bucket);
-        //this.cluster = cluster;
-        //this.bucket = bucket;
-        //this.articleCol = bucket.collection(ARTICLE);
-        //this.dbProperties = dbProperties;
-    //}
-
-//    @PostMapping
-//    public ArticleDto.SingleArticle<ArticleDto> createArticle(@RequestBody ArticleDto.SingleArticle<ArticleDto> article, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
-//        AuthUserDetails authDetails = new AuthUserDetails(2L, "marloaquino080621@gmail.com", null);
-//        return new ArticleDto.SingleArticle<>(articleService.createArticle(article.getArticle(), authDetails));
-//    }
 
 
     @PostMapping
     public ArticleDto.SingleArticle<ArticleDto> createArticle(@RequestBody ArticleDto.SingleArticle<ArticleDto> article, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
-//        AuthUserDetails authDetails = new AuthUserDetails(2L, "marloaquino080621@gmail.com", null);
         return new ArticleDto.SingleArticle<>(articleService.createArticle(article.getArticle(), authUserDetails));
     }
 
@@ -74,20 +55,6 @@ public class ArticleController {
     public void deleteArticle(@PathVariable String slug, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
         articleService.deleteArticle(slug, authUserDetails);
     }
-
-//    @PostMapping("/{slug}/comments")
-//    public CommentDto.SingleComment addCommentsToAnArticle(@PathVariable String slug, @RequestBody CommentDto.SingleComment comment, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
-//        return CommentDto.SingleComment.builder()
-//                .comment(commentService.addCommentsToAnArticle(slug, comment.getComment(), authUserDetails))
-//                .build();
-//    }
-
-//    @PostMapping("/{slug}/comments")
-//    public CommentDto.SingleComment addCommentsToAnArticle(@PathVariable String slug, @RequestBody CommentDto.@NotNull SingleComment comment, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
-//        return CommentDto.SingleComment.builder()
-//                .comment(commentService.addCommentsToAnArticle(slug, comment.getComment(), authUserDetails))
-//                .build();
-//    }
 
     @PostMapping("/{slug}/comments")
     public CommentDto.SingleComment addCommentsToAnArticle(@PathVariable String slug, @RequestBody CommentDto.SingleComment comment, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
@@ -125,51 +92,12 @@ public class ArticleController {
         favoriteService.delete(slug, authUserDetails);
     }
 
-//    @DeleteMapping("/{slug}/favorite")
-//    public ArticleDto.SingleArticle<ArticleDto> unfavoriteArticle(@PathVariable String slug, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
-//        return new ArticleDto.SingleArticle<>(articleService.unfavoriteArticle(slug, authUserDetails));
-//    }
-
-//    @DeleteMapping("/{slug}/favorite")
-//    public void unfavoriteArticle(@PathVariable String slug) {
-//        articleService.unfavoriteArticle(slug);
-//    }
-
-//    @GetMapping("/{slug}/favorite")
-//    public String unfavoriteArticle(@PathVariable String slug) {
-//        return articleService.unfavoriteArticle(slug);
-//    }
-//
-
-//    @DeleteMapping("/favorite/{commentId}")
-//    public void deleteFavorite( @PathVariable("commentId") String commentId, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
-//        articleService.deleteFavorite(commentId, authUserDetails);
-//    }
-
-
-//    @GetMapping
-//    public ArticleDto.MultipleArticle listArticles(@ModelAttribute ArticleQueryParam articleQueryParam) {
-//        return ArticleDto.MultipleArticle.builder().articles(articleService.listArticle(articleQueryParam)).build();
-//    }
-
-//    @GetMapping
-//    public ArticleDto.MultipleArticle listArticles(@ModelAttribute ArticleQueryParam articleQueryParam, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
-//        return ArticleDto.MultipleArticle.builder().articles(articleService.listArticle(articleQueryParam, authUserDetails)).build();
-//    }
 
     @GetMapping("/all")
     public ArticleDto.MultipleArticle feedArticles(@ModelAttribute @Valid FeedParams feedParams, @AuthenticationPrincipal AuthUserDetails authUserDetails) {
         return ArticleDto.MultipleArticle.builder().articles(articleService.feedArticles(authUserDetails, feedParams)).build();
     }
-    // Get All Articles
 
-//    @GetMapping("/feed")
-//    public ArticleDto.MultipleArticle getArticles(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
-////       AuthUserDetails authDetails = new AuthUserDetails(2L, "marloaquino080621@gmail.com", null);
-//        return ArticleDto.MultipleArticle.builder()
-//                .articles(articleService.getAllArticles(authUserDetails))
-//                .build();
-//    }
 
     @GetMapping("/feed")
     public ArticleDto.MultipleArticle getArticles(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
@@ -178,28 +106,11 @@ public class ArticleController {
                 .build();
     }
 
-
-//    @GetMapping
-//    public ArticleDto.MultipleArticle getArticlesYouFollow(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
-//        return ArticleDto.MultipleArticle.builder()
-//                .articles(articleService.getAllArticlesYouFollow(authUserDetails))
-//                .build();
-//    }
-
     @GetMapping
     public ArticleDto.MultipleArticle getArticlesYouFollow() {
         return ArticleDto.MultipleArticle.builder()
                 .articles(articleService.getAllArticlesYouFollow())
                 .build();
     }
-
-//    @GetMapping("/follow")
-//    public ArticleDto.MultipleArticle getArticlesYouFollow(@AuthenticationPrincipal AuthUserDetails authUserDetails) {
-//        return ArticleDto.MultipleArticle.builder()
-//                .articles(articleService.getAllArticlesYouFollow(authUserDetails))
-//                .build();
-//    }
-
-
 
 }

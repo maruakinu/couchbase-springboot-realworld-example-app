@@ -14,7 +14,6 @@ public interface ProfileService {
 
     ProfileDto getProfileByUserId(String userId, AuthUserDetails authUserDetails);
 
-//    ProfileDto getProfileByEmail(String email, AuthUserDetails authUserDetails);
 
     ProfileDto getProfileByUserIds(String userId);
 }

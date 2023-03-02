@@ -18,7 +18,6 @@ public class ArticleDto {
     private String title;
     private String description;
     private String body;
-//    private List<String>  tagList;
 
     private List<String>  tagList;
     private LocalDateTime createdAt;
@@ -26,7 +25,6 @@ public class ArticleDto {
     private Boolean favorited;
     private Long favoritesCount;
     private ProfileDto author;
-//    private ProfileDto favoritedBy;
 
 
 
