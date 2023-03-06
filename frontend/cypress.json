@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost:4100",
+  "env": {
+    "apiUrl": "http://localhost:8080/api",
+    "username": "warren_boyd",
+    "email": "warren.boyd@mailinator.com",
+    "password": "Pa$$w0rd!"
+  }
+}
