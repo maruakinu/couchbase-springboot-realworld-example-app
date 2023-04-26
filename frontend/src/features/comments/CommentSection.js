@@ -39,6 +39,7 @@ function CommentForm() {
     <form className="card comment-form" onSubmit={saveComment}>
       <div className="card-block">
         <textarea
+          id='com'
           className="form-control"
           placeholder="Write a comment..."
           rows={3}
@@ -56,7 +57,7 @@ function CommentForm() {
             'https://static.productionready.io/images/smiley-cyrus.jpg'
           }
         />
-        <button className="btn btn-sm btn-primary" type="submit">
+        <button id='combut' className="btn btn-sm btn-primary" type="submit">
           Post Comment
         </button>
       </div>

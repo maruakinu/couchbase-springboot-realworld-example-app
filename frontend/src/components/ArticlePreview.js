@@ -61,6 +61,7 @@ function ArticlePreview({ article }) {
             alt={article.author.username}
           />
         </Link>
+        
 
         <div className="info">
           <Link className="author" to={`/@${article.author.username}`}>

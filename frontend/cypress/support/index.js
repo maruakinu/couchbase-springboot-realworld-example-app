@@ -17,7 +17,7 @@ import '@cypress/code-coverage/support';
 import '@testing-library/cypress/add-commands';
 import faker from 'faker';
 
-import { login } from '../../src/reducers/auth';
+import { login } from '../../src/reducers/common';
 
 /**
  * Dispatches a given Redux action straight to the application

@@ -136,6 +136,7 @@ function Editor({ match }) {
               <fieldset>
                 <fieldset className="form-group">
                   <input
+                    id='title'
                     className="form-control form-control-lg"
                     type="text"
                     placeholder="Article Title"
@@ -146,6 +147,7 @@ function Editor({ match }) {
 
                 <fieldset className="form-group">
                   <input
+                    id='desc'
                     className="form-control"
                     type="text"
                     placeholder="What's this article about?"
@@ -156,6 +158,7 @@ function Editor({ match }) {
 
                 <fieldset className="form-group">
                   <textarea
+                    id='body'
                     className="form-control"
                     rows="8"
                     placeholder="Write your article (in markdown)"
@@ -166,6 +169,7 @@ function Editor({ match }) {
 
                 <fieldset className="form-group">
                   <input
+                    id='tag'
                     className="form-control"
                     type="text"
                     placeholder="Enter tags"
@@ -190,6 +194,7 @@ function Editor({ match }) {
                 </fieldset>
 
                 <button
+                id='articlebut'
                   className="btn btn-lg pull-xs-right btn-primary"
                   type="button"
                   disabled={inProgress}

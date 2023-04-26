@@ -88,23 +88,27 @@ function AuthScreen({ isRegisterScreen }) {
                       name="username"
                       value={username}
                       onChange={changeUsername}
+                      required
                     />
                   </fieldset>
                 ) : null}
 
                 <fieldset className="form-group">
                   <input
+                    id='email'
                     className="form-control form-control-lg"
                     type="email"
                     placeholder="Email"
                     autoComplete="email"
                     value={email}
                     onChange={changeEmail}
+                    required
                   />
                 </fieldset>
 
                 <fieldset className="form-group">
                   <input
+                    id='pass'
                     className="form-control form-control-lg"
                     type="password"
                     autoComplete="new-password"
@@ -112,10 +116,12 @@ function AuthScreen({ isRegisterScreen }) {
                     name="password"
                     value={password}
                     onChange={changePassword}
+                    required
                   />
                 </fieldset>
 
                 <button
+                  id='but'
                   className="btn btn-lg btn-primary pull-xs-right"
                   type="submit"
                 >

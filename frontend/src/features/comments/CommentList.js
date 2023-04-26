@@ -27,13 +27,13 @@ function DeleteCommentButton({ commentId }) {
    * @type {React.MouseEventHandler<HTMLButtonElement>}
    */
   const deleteComment = () => {
-    dispatch(removeComment({ slug, commentId }));
+    dispatch(removeComment({ commentId }));
   };
 
   return (
     <button
       className="btn btn-sm btn-link mod-options"
-      disabled={isLoading}
+      // disabled={isLoading}
       onClick={deleteComment}
     >
       <i className="ion-trash-a" />

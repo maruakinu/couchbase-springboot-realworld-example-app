@@ -51,7 +51,7 @@ function FollowUserButton({ username, following }) {
     classes += ' btn-secondary';
     textMessage = `Unfollow ${username}`;
   } else {
-    classes += ' btn-outline-secondary';
+    classes += ' btn-outline-secondary ';
     textMessage = `Follow ${username}`;
   }
 

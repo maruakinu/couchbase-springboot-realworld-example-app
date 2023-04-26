@@ -78,7 +78,7 @@ export const getCommentsForArticle = createAsyncThunk(
  */
 export const removeComment = createAsyncThunk(
   'comments/removeComment',
-  async ({commentId }) => {
+  async ({ commentId }) => {
     await agent.Comments.delete(commentId);
   },
   // {
