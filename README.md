@@ -101,4 +101,4 @@ The Apache project JMeter serves as a load testing tool and Cypress is an end-to
  ### Cypress
  1. On your terminal in your Front End IDE chosen, type ` npm install cypress `.
  2. After installing, type `npx cypress open` on your terminal then another window will pop up.
- 3. 2.	After clicking the file on the test shown, it will automatically run its test. 
+ 3. After clicking the file on the test shown, it will automatically run its test. 
