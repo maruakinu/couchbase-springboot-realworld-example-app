@@ -92,11 +92,11 @@ Real World application is a social blogging site just like the social platform M
 ### JMeter and Cypress Testing
 
 ## JMeter
-1. For Mac users, open your terminal, then go to your directory of the extracted zip file, then go to the bin, then type sh. jmeter.sh
+1. For Mac users, open your terminal, then go to your directory of the extracted zip file, then go to the bin, then type `sh. jmeter.sh`.
     For Windows users, go to your extracted file, go to the bin, and then open JMeter (windows batch file) and you are good to go.
 2. Once your JMeter is set and ready, upload our jmx file ` JMeter API-Load Test `. Then you are good to go run the api and load testing.
  
  ## Cypress
- 1. On your terminal in your Front End IDE chosen, type npm install cypress.
- 2. After installing, type npx cypress open on your terminal then another window will pop up.
+ 1. On your terminal in your Front End IDE chosen, type ` npm install cypress `.
+ 2. After installing, type `npx cypress open` on your terminal then another window will pop up.
  3. 2.	After clicking the file on the test shown, it will automatically run its test. 
