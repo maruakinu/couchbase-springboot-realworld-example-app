@@ -1,11 +1,7 @@
 package com.springboot.couchbase.springbootrealworld.domain.article.service;
 
-import com.springboot.couchbase.springbootrealworld.configuration.DBProperties;
 import com.springboot.couchbase.springbootrealworld.domain.article.dto.ArticleDto;
-import com.springboot.couchbase.springbootrealworld.domain.article.dto.CommentDto;
-import com.springboot.couchbase.springbootrealworld.domain.article.dto.FavoriteDto;
 import com.springboot.couchbase.springbootrealworld.domain.article.entity.ArticleDocument;
-import com.springboot.couchbase.springbootrealworld.domain.article.entity.CommentDocument;
 import com.springboot.couchbase.springbootrealworld.domain.article.entity.FavoriteDocument;
 import com.springboot.couchbase.springbootrealworld.domain.article.model.FeedParams;
 import com.springboot.couchbase.springbootrealworld.domain.article.repository.ArticleRepository;
@@ -46,8 +42,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private CommentRepository commentRepository;
 
-    @Autowired
-    private DBProperties dbProperties;
     @Autowired
     private TagRepository tagRepository;
 

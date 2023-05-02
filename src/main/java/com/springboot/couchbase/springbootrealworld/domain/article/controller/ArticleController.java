@@ -1,21 +1,14 @@
 package com.springboot.couchbase.springbootrealworld.domain.article.controller;
 
-import com.couchbase.client.java.Bucket;
-import com.couchbase.client.java.Cluster;
-import com.couchbase.client.java.Collection;
 
-import com.couchbase.client.java.kv.GetResult;
 import com.springboot.couchbase.springbootrealworld.domain.article.dto.ArticleDto;
 import com.springboot.couchbase.springbootrealworld.domain.article.dto.CommentDto;
 import com.springboot.couchbase.springbootrealworld.domain.article.dto.FavoriteDto;
-import com.springboot.couchbase.springbootrealworld.domain.article.model.ArticleQueryParam;
 import com.springboot.couchbase.springbootrealworld.domain.article.model.FeedParams;
 import com.springboot.couchbase.springbootrealworld.domain.article.service.ArticleService;
 import com.springboot.couchbase.springbootrealworld.domain.article.service.CommentService;
 import com.springboot.couchbase.springbootrealworld.domain.article.service.FavoriteService;
 import com.springboot.couchbase.springbootrealworld.security.AuthUserDetails;
-import lombok.RequiredArgsConstructor;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +23,6 @@ public class ArticleController {
     private ArticleService articleService;
     @Autowired
     private CommentService commentService;
-
     @Autowired
     private FavoriteService favoriteService;
 
