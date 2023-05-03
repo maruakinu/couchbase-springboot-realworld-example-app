@@ -32,18 +32,11 @@ public class WebSecurityConfiguration {
                 .antMatchers("/users/**",
                         "/tags/**",
                         "/articles/**").permitAll()
-//                .antMatchers("/users/**",
-//                        "/authenticate",
-//                        "/swagger-resources/**",
-//                        "/swagger-ui/**",
-//                        "/v3/api-docs",
-//                        "/webjars/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .and()
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors();
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
