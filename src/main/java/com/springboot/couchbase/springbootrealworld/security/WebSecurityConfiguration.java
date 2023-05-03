@@ -24,7 +24,7 @@ public class WebSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // TODO: CORS 허용 관련 내용 추가
+
         http
                 .csrf().disable()
                 .formLogin().disable()
