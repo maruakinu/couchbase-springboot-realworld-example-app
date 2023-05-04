@@ -1,4 +1,4 @@
-# Couchbase React Redux+Springboot Realworld Example app
+# Couchbase Springboot Realworld Example app
 Realworld is a backend project using springboot that uses Couchbase for its Database. Couchbase is a NoSQL distributed document database (JSON) with many of the best features of a relational DBMS: SQL, distributed ACID transactions, and much more. For this project we included a frontend in order to visualize you the full stack development and how Real World works
 
 
@@ -72,8 +72,20 @@ Then uncomment this connection for the Couchbase Capella to work. This code may 
 
  once you are done, find the CouchbaseProjectApplication.java and start running your backend from the IDE you are using.
  
- ### FrontEnd
- To get the FrondEnd running locally, install all the required dependencies ` npm install ` and to start the local server ` npm start `
+ ## application.properties
+ 
+ Make sure to change your application.properties depending on the Bucket and Account you have made in your Couchbase, this also works on Couchbase Capella.
+`spring.couchbase.bucket.name=realworld
+spring.couchbase.bucket.user=Administrator
+spring.couchbase.bucket.password=123456`
+ 
+ ## Connecting your Scope and Collection
+ 
+ In order for you to connect through your Couchbase Bucket, make sure to change your scope and collection in every repository depending on the Scope and Collection you created in Couchbase. 
+ Here is an example of the code from the repository that you will be changing: 
+`@Scope("sample")
+@Collection("article")`
+
  
 ## Functionality overview
 
@@ -89,16 +101,3 @@ Real World application is a social blogging site just like the social platform M
 - Favorite articles
 - Follow other users
 
-## JMeter and Cypress Testing
-
-The Apache project JMeter serves as a load testing tool and Cypress is an end-to-end testing tool for modern web test automation that is JavaScript-based.
-
-### JMeter
-1. For Mac users, open your terminal, then go to your directory of the extracted zip file, then go to the bin, then type `sh. jmeter.sh`.
-    For Windows users, go to your extracted file, go to the bin, and then open JMeter (windows batch file) and you are good to go.
-2. Once your JMeter is set and ready, upload our jmx file ` JMeter API-Load Test `. Then you are good to go run the api and load testing.
- 
- ### Cypress
- 1. On your terminal in your Front End IDE chosen, type ` npm install cypress `.
- 2. After installing, type `npx cypress open` on your terminal then another window will pop up.
- 3. After clicking the file on the test shown, it will automatically run its test. 
