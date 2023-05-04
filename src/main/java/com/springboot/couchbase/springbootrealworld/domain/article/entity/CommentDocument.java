@@ -3,15 +3,11 @@ package com.springboot.couchbase.springbootrealworld.domain.article.entity;
 
 import com.springboot.couchbase.springbootrealworld.domain.user.entity.UserDocument;
 import lombok.*;
-import org.springframework.cglib.core.Local;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.Field;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
-
 import java.time.LocalDateTime;
 
 @Getter

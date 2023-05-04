@@ -9,7 +9,6 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.service.ApiInfo;
 
 @SpringBootApplication
-@EnableSwagger2
 public class SpringBootRealworldApplication {
 
 	public static void main(String[] args) {

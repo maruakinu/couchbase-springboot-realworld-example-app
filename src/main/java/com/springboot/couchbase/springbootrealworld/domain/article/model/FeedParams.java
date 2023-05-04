@@ -1,7 +1,6 @@
 package com.springboot.couchbase.springbootrealworld.domain.article.model;
 
 import lombok.*;
-
 import javax.validation.constraints.AssertTrue;
 
 @Getter
