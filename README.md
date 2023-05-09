@@ -73,7 +73,9 @@ Then uncomment this connection for the Couchbase Capella to work. This code may 
 
 To get your Connection string in your Couchbase Capella, go to your settings, go to internet, and make allow your current IP address then copy your connection string and then change your code into the connection string that will be given to you `return "couchbases://cb.wxif3r-rblv1zaqs.cloud.couchbase.com";`. 
 
-You will also need to create a database access for this one and in order to configure it, go to your settings, then go to database access under security, then create your database acess. Make sure that your access is a Read/Write, and whatever user you made, make sure to also change it in the couchbase config.  `public String getUserName() {
+You will also need to create a database access for this one and in order to configure it, go to your settings, then go to database access under security, then create your database acess. Make sure that your access is a Read/Write, and whatever user you made, make sure to also change it in the couchbase config.  
+
+`public String getUserName() {
         return "Administrator";  };
 
 public String getPassword() {
@@ -84,8 +86,8 @@ public String getPassword() {
  ## application.properties
  
  Under resources, make sure to change your application.properties depending on the Bucket, Connection String and Account you have made in your Couchbase, this also works on Couchbase Capella.
-`
-spring.couchbase.bootstrap-hosts=cb.vur7gichywrwexc6.cloud.couchbase.com
+ 
+`spring.couchbase.bootstrap-hosts=cb.vur7gichywrwexc6.cloud.couchbase.com
 spring.couchbase.bucket.name=realworld
 spring.couchbase.bucket.user=Administrator
 spring.couchbase.bucket.password=Couchbase123`
