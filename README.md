@@ -75,11 +75,13 @@ To get your Connection string in your Couchbase Capella, go to your settings, go
 
 You will also need to create a database access for this one and in order to configure it, go to your settings, then go to database access under security, then create your database acess. Make sure that your access is a Read/Write, and whatever user you made, make sure to also change it in the couchbase config.  
 
-`public String getUserName() {
+```
+public String getUserName() {
         return "Administrator";  };
 
 public String getPassword() {
-        return "123456,"; };`
+        return "123456,"; };
+```        
 
  once you are done, find the CouchbaseProjectApplication.java and start running your backend from the IDE you are using.
  
