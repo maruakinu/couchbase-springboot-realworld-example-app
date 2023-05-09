@@ -46,38 +46,49 @@ For this project we are using Couchbase on a docker container which also works o
 Then uncomment this connection for the Couchbase Capella to work. This code may differ since this is my configuration to my own account in Couchbase Capella.
 
 ```
-    public String getConnectionString() {
-
-      return "couchbases://cb.wxif3r-rblv1zaqs.cloud.couchbase.com";
-    };
-
-        public String getUserName() {
-        return "Administrator";
-    }
-
-    public String getPassword() {
-        return "123456,";
-    };
-
-    public String getBucketName() {
-        return "realworld";
-    };
-
     @Override
     protected void configureEnvironment(final ClusterEnvironment.Builder builder) {
         builder.securityConfig().enableTls(true);
         builder.ioConfig(IoConfig.enableDnsSrv(true)).build();
     }
+
+    public String getConnectionString() {
+        return "cb.vur7gichywrwexc6.cloud.couchbase.com";
+    };
+
+    public String getUserName() {
+        return "Administrator";
+    }
+
+    public String getPassword() {
+        return "Couchbase123`";
+    };
+
+    public String getBucketName() {
+        return "realworld";
+    };
+    
+}
 ```
+
+To get your Connection string in your Couchbase Capella, go to your settings, go to internet, and make allow your current IP address then copy your connection string and then change your code into the connection string that will be given to you `return "couchbases://cb.wxif3r-rblv1zaqs.cloud.couchbase.com";`. 
+
+You will also need to create a database access for this one and in order to configure it, go to your settings, then go to database access under security, then create your database acess. Make sure that your access is a Read/Write, and whatever user you made, make sure to also change it in the couchbase config.  `public String getUserName() {
+        return "Administrator";  };
+
+public String getPassword() {
+        return "123456,"; };`
 
  once you are done, find the CouchbaseProjectApplication.java and start running your backend from the IDE you are using.
  
  ## application.properties
  
- Make sure to change your application.properties depending on the Bucket and Account you have made in your Couchbase, this also works on Couchbase Capella.
-`spring.couchbase.bucket.name=realworld
+ Under resources, make sure to change your application.properties depending on the Bucket, Connection String and Account you have made in your Couchbase, this also works on Couchbase Capella.
+`
+spring.couchbase.bootstrap-hosts=cb.vur7gichywrwexc6.cloud.couchbase.com
+spring.couchbase.bucket.name=realworld
 spring.couchbase.bucket.user=Administrator
-spring.couchbase.bucket.password=123456`
+spring.couchbase.bucket.password=Couchbase123`
  
  ## Connecting your Scope and Collection
  
@@ -85,6 +96,10 @@ spring.couchbase.bucket.password=123456`
  Here is an example of the code from the repository that you will be changing: 
 `@Scope("sample")
 @Collection("article")`
+
+## Postman Requests
+
+Our example API request can be download here: ` https://drive.google.com/drive/folders/1sNoQd9ytj8MXa5Psn0vUY6WuP1-tmTjg?usp=share_link `
 
  
 ## Functionality overview
